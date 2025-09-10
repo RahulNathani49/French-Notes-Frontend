@@ -36,3 +36,62 @@
     transform: rotate(360deg);
   }
 }
+
+
+/* --- General Reset --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+/* --- App Container --- */
+#root, .app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* --- Main Content --- */
+main {
+  flex: 1;
+  padding: 20px;
+  background-color: #f8f9fa;
+}
+
+/* --- Header --- */
+header {
+  padding: 15px 30px;
+  background-color: #007bff;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h2 {
+  margin: 0;
+}
+
+header nav a {
+  color: #fff;
+  text-decoration: none;
+  margin-right: 15px;
+  font-weight: bold;
+}
+
+header nav a:hover {
+  text-decoration: underline;
+}
+
+/* --- Footer --- */
+footer {
+  padding: 200px 30px;
+  background-color: #f1f1f1;
+  text-align: center;
+  border-top: 1px solid #ccc;
+}
+.logout-btn{
+  background-color: red!important;
+}

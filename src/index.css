@@ -1,13 +1,586 @@
+/* Global body + font */
 body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  width: 100%;
+
+  background-color: #f9f9f9;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+
+/* Header Container */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  background: linear-gradient(90deg, #007bff, #00aaff);
+  color: white;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
+
+/* Header Logo */
+header h2 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin: 0;
+  cursor: pointer;
+  letter-spacing: 1px;
+}
+
+/* Navigation */
+header nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+header nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+header nav a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Responsive Menu */
+@media (max-width: 768px) {
+  header,footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  header nav {
+    flex-direction: column;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  header nav a {
+    width: 100%;
+    text-align: center;
+  }
+
+}
+
+/* Footer */
+footer {
+
+  background-color: #f1f1f1;
+  text-align: center;
+  border-top: 1px solid #ccc;
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+}
+
+/* Buttons */
+button {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+/* Tabs */
+.tabs button {
+  margin-right: 10px;
+  background-color: #ccc;
+  color: #000;
+}
+
+.tabs button.active {
+  background-color: #007bff;
+  color: white;
+}
+
+/* Content card */
+.content-card {
+  border: 1px solid #ccc;
+  margin: 10px 0;
+  padding: 15px;
+  border-radius: 5px;
+  background-color: white;
+}
+
+.content-card img {
+  max-width: 200px;
+  margin-top: 10px;
+}
+/* Hero Section */
+.hero {
+  background: linear-gradient(to right, #007bff, #00aaff);
+  color: white;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+}
+
+.cta-btn {
+  background-color: white;
+  color: #007bff;
+  padding: 12px 30px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cta-btn:hover {
+  background-color: #e0e0e0;
+}
+
+/* Features Section */
+.features {
+  padding: 60px 20px;
+  text-align: center;
+  background-color: #f9f9f9;
+}
+
+.features h2 {
+  font-size: 2.2rem;
+  margin-bottom: 40px;
+}
+
+.feature-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 30px;
+  width: 250px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card h3 {
+  margin-bottom: 15px;
+  color: #007bff;
+}
+
+.exam-tips {
+   padding: 200px 20px;
+   text-align: center;
+   background-color: #f0f8ff; /* light blue background */
+ }
+
+.exam-tips h2 {
+  font-size: 2.2rem;
+  margin-bottom: 40px;
+  color: #007bff;
+  font-weight: bold;
+}
+
+.tips-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.tip-card {
+  background: white;
+  border-radius: 10px;
+  padding: 25px;
+  width: 300px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tip-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+.tip-card h3 {
+  color: #007bff;
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+}
+
+.tip-card p {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #333;
+}
+
+/* Forms */
+form input, form select, form textarea {
+  padding: 8px;
+  margin: 5px 0;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+table th {
+  background-color: #f1f1f1;
+}
+
+
+
+button {
+  padding: 12px 25px;       /* taller and wider */
+  font-size: 1.1rem;        /* bigger text */
+  border-radius: 8px;       /* slightly rounded corners */
+  background-color: #007bff; /* primary blue */
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin:0 20px;
+}
+
+button:hover {
+  background-color: #0056b3; /* darker on hover */
+  transform: translateY(-2px); /* subtle lift on hover */
+}
+select {
+  padding: 10px 15px;       /* more clickable area */
+  font-size: 1rem;          /* readable text */
+  border-radius: 6px;       /* rounded corners */
+  border: 1px solid #ccc;   /* subtle border */
+  background-color: #fff;   /* white background */
+  color: #333;              /* text color */
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.2s ease;
+}
+
+select:focus {
+  outline: none;
+  border-color: #007bff;    /* match primary color */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Admin Dashboard Layout */
+.admin-dashboard {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Arial', sans-serif;
+  background-color: #f9f9f9;
+}
+
+/* Sidebar */
+.admin-sidebar {
+  width: 220px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background: white;
+}
+
+.admin-sidebar h2 {
+  font-size: 24px;
+  color: black;
+  margin-bottom: 20px;
+}
+
+.admin-sidebar button {
+  background: #007bff;
+  border: none;
+  color: white;
+  text-align: left;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.admin-sidebar button:hover {
+  background-color: #0056b3;
+  color: white;
+}
+
+/*.admin-sidebar .logout-btn {*/
+/*  margin-top: auto;*/
+/*  background-color: #dc3545;*/
+/*}*/
+
+/*.admin-sidebar .logout-btn:hover {*/
+/*  background-color: #b02a37;*/
+/*}*/
+
+/* Main Content */
+.admin-main {
+  flex: 1;
+  padding: 20px;
+}
+
+/* Sections */
+.section {
+  background: #fff;
+  padding: 20px;
+  margin-bottom: 30px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Filters */
+.filters {
+  margin: 10px 0 15px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.filters button {
+  padding: 7px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: #fff;
+  font-weight: bold;
+}
+
+.filters button:hover {
+  background-color: #0056b3;
+}
+
+.filters select {
+  padding: 6px 12px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  background-color: #e9f2ff;
+  text-align: left;
+  padding: 10px;
+  color: #333;
+}
+
+td {
+  padding: 10px;
+  vertical-align: middle;
+  border-bottom: 1px solid #ddd;
+}
+
+tr:nth-child(even) {
+  background-color: #f7f7f7;
+}
+
+/* Buttons in table */
+table button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 5px;
+  font-weight: bold;
+}
+
+table button:hover {
+  background-color: #0056b3;
+}
+
+/* Inputs and textareas */
+input[type="text"], textarea, select, input[type="file"] {
+  width: 100%;
+  padding: 8px 10px;
+  margin: 6px 0 12px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+button[type="submit"] {
+  background-color: #28a745;
+  color: #fff;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button[type="submit"]:hover {
+  background-color: #218838;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .admin-dashboard {
+    flex-direction: column;
+  }
+  .admin-sidebar {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 10px;
+  }
+  .admin-sidebar button {
+    white-space: nowrap;
+  }
+  .admin-main {
+    padding: 10px;
+  }
+}
+
+.section {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+}
+
+.section h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+/* Header styling */
+.header {
+  background: linear-gradient(90deg, #007bff, #00aaff);
+  color: white;
+  padding: 15px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Navigation links */
+header .nav {
+  display: flex;
+  gap: 20px;
+}
+
+header .nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 5px;
+  transition: background 0.3s ease;
+}
+
+header .nav a:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+
+/* Toggle button (hamburger) */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+/* Responsive nav for mobile */
+@media (max-width: 768px) {
+  header .nav {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    background: #007bff;
+    width: 100%;
+    padding: 15px;
+    gap: 15px;
+    transform: translateY(-200%);
+    transition: transform 0.3s ease;
+  }
+
+ header .nav.open {
+    transform: translateY(0);
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+}
+/* Improve nav-pills hover & active states */
+.nav-pills .nav-link {
+  color: black;
+  background-color: transparent;
+  transition: all 0.3s ease;
+  border : 1px solid #0056b3;
+}
+
+.nav-pills .nav-link:hover {
+  background-color: #e9f2ff; /* light blue background on hover */
+  color: #0056b3; /* darker blue text */
+}
+
+.nav-pills .nav-link.active {
+  background-color: #007bff; /* solid blue for active */
+  color: #fff; /* white text */
+}
+
+button.list-group-item{
+  border : 1px solid !important;
+}
+
+
