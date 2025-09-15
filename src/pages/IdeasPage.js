@@ -33,9 +33,46 @@ function IdeasPage() {
         fetchIdeas(setIdeas, setError, setLoading, redirectToLogin);
     }, []);
 
-    // The renderFile function remains in the component as it's a presentation concern
+    // The renderFile function is now corrected to not include Bootstrap card classes
     const renderFile = (filePath) => {
-        // ... (the same renderFile function from your code)
+        if (!filePath) return null; // Return null if no file to avoid rendering anything
+
+        const extension = filePath.split('.').pop().toLowerCase();
+
+        const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'svg'];
+        const audioExtensions = ['mp3', 'wav', 'ogg'];
+        const videoExtensions = ['mp4', 'mov', 'avi', 'webm'];
+
+        if (imageExtensions.includes(extension)) {
+            return (
+                <img
+                    src={filePath}
+                    alt="Idea file"
+                    className="img-fluid"
+                    style={{ maxHeight: '200px', objectFit: 'cover' }}
+                />
+            );
+        } else if (audioExtensions.includes(extension)) {
+            return (
+                <audio controls className="w-100">
+                    <source src={filePath} type={`audio/${extension}`} />
+                    Your browser does not support the audio element.
+                </audio>
+            );
+        } else if (videoExtensions.includes(extension)) {
+            return (
+                <video controls className="w-100" style={{ maxHeight: '200px' }}>
+                    <source src={filePath} type={`video/${extension}`} />
+                    Your browser does not support the video tag.
+                </video>
+            );
+        } else {
+            return (
+                <a href={filePath} target="_blank" rel="noopener noreferrer">
+                    Download {extension.toUpperCase()} File
+                </a>
+            );
+        }
     };
 
     return (
@@ -53,6 +90,9 @@ function IdeasPage() {
                                     ideas.map(idea => (
                                         <div key={idea._id} className="col-lg-4 col-md-6 col-sm-12">
                                             <div className="card h-100 shadow-sm w-100">
+                                                {/* Render the file outside of the main card-body if it's an image or video */}
+
+
                                                 <div className="card-body d-flex flex-column">
                                                     <h5 className="card-title">{idea.title}</h5>
                                                     <p className="card-text">{idea.body}</p>
@@ -60,9 +100,13 @@ function IdeasPage() {
                                                         <small className="text-muted d-block">Submitted by: {idea.submittedBy?.username || "N/A"}</small>
                                                         <small className="text-muted d-block">Submitted at: {new Date(idea.createdAt).toLocaleString()}</small>
                                                     </div>
-                                                    {renderFile(idea.filePath)}
-
+                                                    {/* Render the file inside the card-body for audio and other types */}
+                                                    {(idea.filePath && !['jpg', 'jpeg', 'png', 'gif', 'svg', 'mp4', 'mov', 'avi', 'webm'].includes(idea.filePath.split('.').pop().toLowerCase())) && renderFile(idea.filePath)}
+                                                    {(idea.filePath && ['jpg', 'jpeg', 'png', 'gif', 'svg'].includes(idea.filePath.split('.').pop().toLowerCase())) && renderFile(idea.filePath)}
+                                                    {(idea.filePath && ['mp4', 'mov', 'avi', 'webm'].includes(idea.filePath.split('.').pop().toLowerCase())) && renderFile(idea.filePath)}
                                                 </div>
+
+
                                             </div>
                                         </div>
                                     ))
