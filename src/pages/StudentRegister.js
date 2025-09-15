@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
+import { toast } from "react-toastify";
 
 function StudentRegister() {
     const [username, setUsername] = useState("");
@@ -20,14 +21,16 @@ function StudentRegister() {
                 name,
                 email
             });
-            setMessage("✅ Student registered successfully. You can now log in.");
+            toast.success("Student registered successfully");
+
 
             // Redirect to login after 2 seconds
             setTimeout(() => {
                 navigate("/student-login");
             }, 2000);
         } catch (err) {
-            setMessage(err.response?.data?.error || "❌ Registration failed");
+            toast.error(err.response?.data?.error || "❌ Registration failed");
+
         }
     };
 

@@ -10,7 +10,7 @@ import {
     FaTools,
     FaBars,
     FaUserCircle,
-    FaTimes,
+    FaTimes, FaLightbulb,
 } from "react-icons/fa";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -51,6 +51,9 @@ function Header() {
                     </Link>
                     <Link to="/admin-dashboard" onClick={() => setMenuOpen(false)}>
                         <FaTools /> Admin Dashboard
+                    </Link>
+                    <Link to="/ideas" onClick={() => setMenuOpen(false)}>
+                        <FaLightbulb /> Ideas
                     </Link>
                     <Link to="/profile" onClick={() => setMenuOpen(false)}>
                          <FaUserCircle /> Profile

@@ -4,6 +4,7 @@ import api from "../api/axios";
 import Layout from "../components/Layout";
 import "../studentdashboard.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { toast } from "react-toastify";
 
 
 function StudentDashboard() {
@@ -62,10 +63,12 @@ function StudentDashboard() {
             if (Array.isArray(res.data)) {
                 setContent(res.data);
                 if (res.data.length === 0) {
-                    setMessage(`No content found for "${activeTab}".`);
+
+                    toast.error(`No content found for "${activeTab}".`);
                 }
             } else {
-                setMessage("Unexpected response from server");
+                toast.error("Unexpected response from server");
+
             }
         } catch (err) {
             const status = err?.response?.status;
