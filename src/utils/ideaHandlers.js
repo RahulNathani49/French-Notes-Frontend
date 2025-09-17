@@ -99,3 +99,50 @@ export const handleDeleteIdea = async (id, ideas, setIdeas) => {
         toast.error("Failed to delete idea.");
     }
 };
+
+// =====================
+// Update Idea (Admin Only)
+// =====================
+export const handleUpdateIdea = async (id, ideaForm, ideas, setIdeas, setEditingIdea) => {
+    const token = localStorage.getItem("adminToken");
+    const role = localStorage.getItem("adminRole");
+
+    if (!token || role !== "admin") {
+        toast.error("You do not have permission to update ideas.");
+        return;
+    }
+
+    try {
+        const formData = new FormData();
+        formData.append("title", ideaForm.title);
+        formData.append("body", ideaForm.body);
+        if (ideaForm.file) {
+            formData.append("file", ideaForm.file);
+        }
+
+        const res = await api.put(`/ideas/${id}`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        toast.success("✅ Idea updated successfully");
+
+        // Find the original idea from the state
+        const originalIdea = ideas.find(idea => idea._id === id);
+
+        // Update the state by merging the original data with the new data
+        setIdeas(ideas.map(idea => (
+            idea._id === id
+                ? { ...originalIdea, ...res.data.idea }
+                : idea
+        )));
+
+        setEditingIdea(null);
+    } catch (err) {
+        console.error("Failed to update idea:", err);
+        const errorMessage = err.response?.data?.error || "❌ Failed to update idea.";
+        toast.error(errorMessage);
+    }
+};

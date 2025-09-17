@@ -25,9 +25,7 @@ function IdeasPage() {
         handleSubmitIdea(e, ideaForm, setSubmitting, setIdeaForm, () => fetchIdeas(setIdeas, setError, setLoading, redirectToLogin));
     };
 
-    const handleIdeaDelete = (id) => {
-        handleDeleteIdea(id, ideas, setIdeas);
-    };
+
 
     useEffect(() => {
         fetchIdeas(setIdeas, setError, setLoading, redirectToLogin);
@@ -95,7 +93,7 @@ function IdeasPage() {
 
                                                 <div className="card-body d-flex flex-column">
                                                     <h5 className="card-title">{idea.title}</h5>
-                                                    <p className="card-text">{idea.body}</p>
+                                                    <p className="card-text" style={{whiteSpace: "pre-wrap"}} > {idea.body}</p>
                                                     <div className="mt-auto">
                                                         <small className="text-muted d-block">Submitted by: {idea.submittedBy?.username || "N/A"}</small>
                                                         <small className="text-muted d-block">Submitted at: {new Date(idea.createdAt).toLocaleString()}</small>

@@ -19,7 +19,7 @@ function Header() {
 
     return (
         <header className="header">
-            <div className="header-container">
+            <div className="header-container w-100">
                 {/* Logo */}
                 <h2 className="logo">French Notes</h2>
 
@@ -37,24 +37,27 @@ function Header() {
                     <Link to="/" onClick={() => setMenuOpen(false)}>
                         <FaHome /> Home
                     </Link>
-                    <Link to="/student-register" onClick={() => setMenuOpen(false)}>
-                        <FaUserGraduate /> Student Register
-                    </Link>
-                    <Link to="/student-login" onClick={() => setMenuOpen(false)}>
-                        <FaSignInAlt /> Student Login
-                    </Link>
                     <Link to="/student-dashboard" onClick={() => setMenuOpen(false)}>
                         <FaChalkboardTeacher /> Student Dashboard
                     </Link>
+                    <Link to="/ideas" onClick={() => setMenuOpen(false)}>
+                        <FaLightbulb /> Ideas
+                    </Link>
+                    <Link to="/student-register" onClick={() => setMenuOpen(false)}>
+                        <FaUserGraduate /> Student Register
+                    </Link>
+
+                    <Link to="/student-login" onClick={() => setMenuOpen(false)}>
+                        <FaSignInAlt /> Student Login
+                    </Link>
+
                     <Link to="/admin-login" onClick={() => setMenuOpen(false)}>
                         <FaUserShield /> Admin Login
                     </Link>
                     <Link to="/admin-dashboard" onClick={() => setMenuOpen(false)}>
                         <FaTools /> Admin Dashboard
                     </Link>
-                    <Link to="/ideas" onClick={() => setMenuOpen(false)}>
-                        <FaLightbulb /> Ideas
-                    </Link>
+
                     <Link to="/profile" onClick={() => setMenuOpen(false)}>
                          <FaUserCircle /> Profile
                     </Link>

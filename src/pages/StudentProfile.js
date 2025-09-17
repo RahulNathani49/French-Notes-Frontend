@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import api from "../api/axios";
 import Layout from "../components/Layout";
+import {Link} from "react-router-dom";
 
 function StudentProfile() {
     const [profile, setProfile] = useState(null);
@@ -48,6 +49,9 @@ function StudentProfile() {
                         </p>
                         <p>
                             <strong>Email:</strong> {profile.email}
+                        </p>
+                        <p className="mt-3">
+                            <Link to="/forgot-password">Reset Password</Link>
                         </p>
                     </div>
                 ) : (

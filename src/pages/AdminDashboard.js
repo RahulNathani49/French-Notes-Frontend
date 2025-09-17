@@ -9,6 +9,8 @@ import UsersSection from "../components/admin/UsersSection";
 import LoginLogsSection from "../components/admin/LoginLogsSection";
 import ManageContentSection from "../components/admin/ManageContentSection";
 import AddContentSection from "../components/admin/AddContentSection";
+import IdeasSection from "../components/admin/IdeasSection"; // <-- Add this import
+
 
 // Keep all the handler functions and state management in one place.
 // Pass these down as props to the children components.
@@ -24,8 +26,9 @@ import {
     handleEditClick,
     handleEditChange,
     handleUpdateContent,
-    handleDeleteContent,
+    handleDeleteContent
 } from "../utils/adminHandlers";
+import {fetchIdeas, handleDeleteIdea,handleUpdateIdea} from "../utils/ideaHandlers";
 
 function AdminDashboard() {
     // States
@@ -40,17 +43,17 @@ function AdminDashboard() {
     const [text, setText] = useState("");
     const [file, setFile] = useState(null);
     const [audioFile, setAudioFile] = useState(null);
-    const [message, setMessage] = useState("");
     const [contentError, setContentError] = useState("");
     const [users, setUsers] = useState([]);
     const [editingId, setEditingId] = useState(null);
     const [editForm, setEditForm] = useState({ title: "", type: "", text: "", imageUrl: "", imageFile: null, audioFile: null });
     const [activeSection, setActiveSection] = useState("users");
-
+    const [ideas, setIdeas] = useState([]); // <-- Add state for ideas
+    const [editingIdea, setEditingIdea] = useState(null);
     const navigate = useNavigate();
 
     // Admin Guard & Effects (these remain here)
-    const redirectToLogin = (msg = "Please admin as student") => {
+    const redirectToLogin = (msg = "Please login as admin") => {
         localStorage.removeItem("adminToken");
         localStorage.removeItem("adminRole");
         navigate(`/admin-login?msg=${encodeURIComponent(msg)}`, { replace: true });
@@ -66,6 +69,8 @@ function AdminDashboard() {
         fetchUsers(setUsers);
         fetchLogs(setLogs, setError, setLoading);
         fetchContent(setContents);
+        fetchIdeas(setIdeas, setError, setLoading, redirectToLogin);
+
     }, []);
 
     const displayedLogs = logs.filter((log) => {
@@ -83,13 +88,13 @@ function AdminDashboard() {
                     <aside className="col-12 col-md-3 col-lg-2 bg-light p-3 border-end">
                         <h2 className="h5 fw-bold mb-3">Admin Panel</h2>
                         <div className="d-grid gap-2">
-                            {["users", "login", "manage", "add"].map((section) => (
+                            {["users", "login", "manage","ideas", "add"  ].map((section) => (
                                 <button
                                     key={section}
                                     className={`btn ${activeSection === section ? "btn-primary" : "btn-outline-primary"}`}
                                     onClick={() => setActiveSection(section)}
                                 >
-                                    {section === "users" ? "Manage Users" : section === "login" ? "Login Requests" : section === "manage" ? "Manage Content" : "Add Content"}
+                                    {section === "users" ? "Manage Users" : section === "login" ? "Manage Login Requests" : section === "ideas" ? "Manage Ideas" : section === "manage" ? "Manage Content" : "Add Content"   }
                                 </button>
                             ))}
                             <button className="btn btn-danger" onClick={() => handleLogout(navigate)}>Logout</button>
@@ -140,6 +145,16 @@ function AdminDashboard() {
                                 handleAddContent={handleAddContent}
                                 setContents={setContents}
                                 setContentError={setContentError}
+                            />
+                        )}
+                        {activeSection === "ideas" && ( // <-- New section
+                            <IdeasSection
+                                ideas={ideas}
+                                setIdeas={setIdeas}
+                                editingIdea={editingIdea}
+                                setEditingIdea={setEditingIdea}
+                                handleUpdateIdea={handleUpdateIdea}
+                                handleDeleteIdea={handleDeleteIdea}
                             />
                         )}
                     </main>
