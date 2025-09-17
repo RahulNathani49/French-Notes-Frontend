@@ -57,6 +57,8 @@ function StudentProfile() {
                 ) : (
                     !error && <p>Loading profile...</p>
                 )}
+
+
             </div>
         </Layout>
     );

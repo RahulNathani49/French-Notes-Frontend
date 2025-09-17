@@ -583,4 +583,77 @@ button.list-group-item{
   border : 1px solid !important;
 }
 
+/* Mobile Styles (Top-to-Bottom Drawer) */
+.sidebar-container {
+  position: fixed;
+  top: -100%; /* Initially hidden above the viewport */
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #f8f9fa; /* Match the body background */
+  transition: top 0.3s ease-in-out;
+  z-index: 1050; /* Above most content */
+  padding: 1rem; /* Add some padding */
+  overflow-y: auto; /* Allow scrolling if content is long */
+}
+
+.sidebar-container.open {
+  top: 0; /* Slides down into view */
+}
+
+/* This will be applied on mobile screens to hide the main content when the sidebar is open */
+.main-content-hidden {
+  display: none;
+}
+
+/* Desktop Styles (Left-to-Right) */
+@media (min-width: 992px) {
+  .sidebar-container {
+    position: static; /* Removes fixed position */
+    top: auto;
+    left: auto;
+    height: auto;
+    padding: 0;
+    z-index: auto;
+    transition: none;
+  }
+}
+
+/*
+  Admin Dashboard Sidebar - Mobile Drawer Styles
+  This class is added to the aside element in AdminDashboard.js
+*/
+.admin-sidebar-drawer {
+  /* These styles apply on all screen sizes, but are most visible on mobile */
+  position: fixed;
+  top: -100%; /* Hidden off-screen */
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #f8f9fa;
+  transition: top 0.3s ease-in-out;
+  z-index: 1050;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.admin-sidebar-drawer.open {
+  top: 0; /* Slides down into view when 'open' class is present */
+}
+
+/*
+  Admin Dashboard Sidebar - Desktop Styles
+  We override the fixed positioning on desktop to make it a static column.
+*/
+@media (min-width: 992px) {
+  .admin-sidebar-drawer {
+    position: static; /* Restores to normal document flow */
+    top: auto;
+    left: auto;
+    height: auto;
+    padding: 0;
+    z-index: auto;
+    transition: none;
+  }
+}
 

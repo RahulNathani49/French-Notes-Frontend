@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "../index.css"; // import your central CSS file
+import "../index.css";
 import {
     FaHome,
     FaUserGraduate,
@@ -10,12 +10,38 @@ import {
     FaTools,
     FaBars,
     FaUserCircle,
-    FaTimes, FaLightbulb,
+    FaTimes, FaLightbulb, FaSignOutAlt,
 } from "react-icons/fa";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useNavigate } from "react-router-dom";
+
 
 function Header() {
     const [menuOpen, setMenuOpen] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [isStudentLoggedIn, setIsStudentLoggedIn] = useState(false); // New state
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const adminToken = localStorage.getItem("adminToken");
+        const studentToken = localStorage.getItem("studentToken"); // Get student token
+
+        if (adminToken) {
+            const role = localStorage.getItem("adminRole");
+            setIsAdmin(role === "admin");
+        } else {
+            setIsAdmin(false);
+        }
+
+        // Check if student token exists
+        setIsStudentLoggedIn(!!studentToken);
+    }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem("studentToken");
+        localStorage.removeItem("studentRole");
+        navigate("/student-login?msg=Logged out", { replace: true });
+    };
 
     return (
         <header className="header">
@@ -54,13 +80,27 @@ function Header() {
                     <Link to="/admin-login" onClick={() => setMenuOpen(false)}>
                         <FaUserShield /> Admin Login
                     </Link>
-                    <Link to="/admin-dashboard" onClick={() => setMenuOpen(false)}>
-                        <FaTools /> Admin Dashboard
-                    </Link>
 
-                    <Link to="/profile" onClick={() => setMenuOpen(false)}>
-                         <FaUserCircle /> Profile
-                    </Link>
+
+                    {/* Conditionally render Admin Dashboard link based on the isAdmin state */}
+                    {isAdmin && (
+                        <Link to="/admin-dashboard" onClick={() => setMenuOpen(false)}>
+                            <FaTools /> Admin Dashboard
+                        </Link>
+                    )}
+
+                    {!isAdmin && (
+                        <Link to="/profile" onClick={() => setMenuOpen(false)}>
+                            <FaUserCircle /> Profile
+                        </Link>
+                    )}
+
+                    {/* Conditionally render Logout button based on the student login state */}
+                    {isStudentLoggedIn && (
+                        <Link to="/student-login" onClick={handleLogout} className="">
+                            <FaSignOutAlt/> Logout
+                        </Link>
+                    )}
                 </nav>
             </div>
         </header>

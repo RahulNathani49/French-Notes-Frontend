@@ -1,21 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
 import { handleEditClick, handleEditChange, handleUpdateContent, handleDeleteContent } from "../../utils/adminHandlers";
 
 const ManageContentSection = ({ contents, setContents, contentError, filterType, setFilterType, editingId, setEditingId, editForm, setEditForm, setContentError }) => {
+    // New state for the search filter
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const filteredContents = contents.filter(c => {
+        const matchesType = !filterType || c.type === filterType;
+        const matchesSearch = c.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            c.text.toLowerCase().includes(searchTerm.toLowerCase());
+        return matchesType && matchesSearch;
+    });
+
     return (
         <div className="py-5">
             <h3 className="mb-3">Manage Content</h3>
             {contentError && <p className="text-danger">{contentError}</p>}
 
-            <div className="mb-3">
-                <label className="form-label">Filter by Type:</label>
-                <select className="form-select w-auto d-inline-block" value={filterType} onChange={(e) => setFilterType(e.target.value)}>
-                    <option value="">All</option>
-                    <option value="writing">Writing</option>
-                    <option value="speaking">Speaking</option>
-                    <option value="listening">Listening</option>
-                    <option value="reading">Reading</option>
-                </select>
+            <div className="mb-3 d-flex flex-column flex-md-row gap-2">
+                <div className="flex-grow-1">
+                    <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Search by title or text..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                </div>
+                <div>
+                    <select className="form-select w-auto" value={filterType} onChange={(e) => setFilterType(e.target.value)}>
+                        <option value="">All Types</option>
+                        <option value="writing">Writing</option>
+                        <option value="speaking">Speaking</option>
+                        <option value="listening">Listening</option>
+                        <option value="reading">Reading</option>
+                    </select>
+                </div>
             </div>
 
             {/* Edit Form */}
@@ -53,20 +73,26 @@ const ManageContentSection = ({ contents, setContents, contentError, filterType,
                     </tr>
                     </thead>
                     <tbody>
-                    {contents.filter(c => !filterType || c.type === filterType).map(c => (
-                        <tr key={c._id}>
-                            <td>{c.type}</td>
-                            <td>{c.title}</td>
-                            <td>{c.imageUrl && <img src={c.imageUrl} alt={c.title} className="img-fluid rounded" style={{ maxWidth: "150px" }} />}</td>
-                            <td>{c.audioUrl && <audio controls className="w-100 mt-2"><source src={c.audioUrl} type="audio/mpeg" />Your browser does not support the audio element.</audio>}</td>
-                            <td>
-                                <div className="d-flex gap-2">
-                                    <button className="btn btn-sm btn-primary" onClick={() => handleEditClick(c, setEditingId, setEditForm)}>Edit</button>
-                                    <button className="btn btn-sm btn-danger" onClick={() => handleDeleteContent(c._id, setContents, contents)}>Delete</button>
-                                </div>
-                            </td>
+                    {filteredContents.length > 0 ? (
+                        filteredContents.map(c => (
+                            <tr key={c._id}>
+                                <td>{c.type}</td>
+                                <td>{c.title}</td>
+                                <td>{c.imageUrl && <img src={c.imageUrl} alt={c.title} className="img-fluid rounded" style={{ maxWidth: "150px" }} />}</td>
+                                <td>{c.audioUrl && <audio controls className="w-100 mt-2"><source src={c.audioUrl} type="audio/mpeg" />Your browser does not support the audio element.</audio>}</td>
+                                <td>
+                                    <div className="d-flex gap-2">
+                                        <button className="btn btn-sm btn-primary" onClick={() => handleEditClick(c, setEditingId, setEditForm)}>Edit</button>
+                                        <button className="btn btn-sm btn-danger" onClick={() => handleDeleteContent(c._id, setContents, contents)}>Delete</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="5" className="text-center text-muted py-4">No content found matching the filters.</td>
                         </tr>
-                    ))}
+                    )}
                     </tbody>
                 </table>
             </div>

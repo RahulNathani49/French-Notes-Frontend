@@ -5,15 +5,16 @@ import Layout from "../components/Layout";
 import "../studentdashboard.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { toast } from "react-toastify";
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 function StudentDashboard() {
     const [content, setContent] = useState([]);
     const [message, setMessage] = useState("");
     const [activeTab, setActiveTab] = useState("writing");
-    const [activeContent, setActiveContent] = useState(null); // selected content
-    const [template, setTemplate] = useState("");
+    const [activeContent, setActiveContent] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     const navigate = useNavigate();
 
@@ -24,12 +25,6 @@ function StudentDashboard() {
         navigate(`/student-login?msg=${encodeURIComponent(msg)}`, { replace: true });
     };
 
-    const handleLogout = () => {
-        localStorage.removeItem("studentToken");
-        localStorage.removeItem("studentRole");
-        navigate("/student-login?msg=Logged out", { replace: true });
-    };
-
     // Guard: require student token + role
     useEffect(() => {
         const token = localStorage.getItem("studentToken");
@@ -37,7 +32,6 @@ function StudentDashboard() {
         if (!token || role !== "student") {
             redirectToLogin("Access denied. Student login required.");
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Fetch content by type
@@ -57,18 +51,18 @@ function StudentDashboard() {
 
             const res = await api.get("/content/", {
                 headers: { Authorization: `Bearer ${token}` },
-                params: { type: activeTab }, // filter by type
+                params: { type: activeTab },
             });
 
             if (Array.isArray(res.data)) {
                 setContent(res.data);
-                if (res.data.length === 0) {
-
+                if (res.data.length > 0) {
+                    setActiveContent(res.data[0]);
+                } else {
                     toast.error(`No content found for "${activeTab}".`);
                 }
             } else {
                 toast.error("Unexpected response from server");
-
             }
         } catch (err) {
             const status = err?.response?.status;
@@ -86,37 +80,33 @@ function StudentDashboard() {
     // Refetch whenever tab changes
     useEffect(() => {
         fetchContent();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeTab]);
 
-    const templates = ["Basic Template", "Intermediate Template", "Advanced Template"];
+    // Handles content selection and sidebar closing
+    const handleContentClick = (item) => {
+        setActiveContent(item);
+        if (window.innerWidth < 992) {
+            setIsSidebarOpen(false);
+        }
+    };
+
+    // Handles tab change and sidebar closing
+    const handleTabChange = (tab) => {
+        setActiveTab(tab);
+        if (window.innerWidth < 992) {
+            setIsSidebarOpen(false);
+        }
+    };
 
     return (
         <Layout>
             <div className="container-fluid py-4">
-                {/* Header */}
-                <div className=" d-flex justify-content-between align-items-center mb-4 flex-wrap py-2">
-                    <h2 className="fw-bold text-primary fs-4 fs-md-1 ">French Notes Student Dashboard</h2>
-                    <button className="btn btn-danger " onClick={handleLogout}>
-                        Logout
+                {/* Mobile Menu Toggle Button */}
+                <div className="d-lg-none my-3 d-flex justify-content-between">
+                    <button className="btn btn-dark" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+                        <FontAwesomeIcon icon={isSidebarOpen ? faTimes : faBars} /> Notes
                     </button>
                 </div>
-
-                {/* Tabs */}
-                <ul className="nav nav-pills mb-4 justify-content-center flex-wrap d-flex">
-                    {["writing", "speaking", "listening", "reading"].map((tab) => (
-                        <li className="nav-item mx-1 m-2 " key={tab}>
-                            <button
-                                className={`nav-link ${activeTab === tab ? "active" : ""} text-capitalize`}
-                                onClick={() => !loading && setActiveTab(tab)}
-                                disabled={loading}
-                            >
-                                {tab}
-                            </button>
-                        </li>
-                    ))}
-                </ul>
-
 
                 {/* Loading & Message */}
                 {loading && <div className="alert alert-info">Loading content...</div>}
@@ -126,23 +116,47 @@ function StudentDashboard() {
 
                 {/* Content Area */}
                 <div className="row">
-                    {/* Sidebar */}
-                    <div className="mb-4 col-lg-2 col-xs-12">
-                        <div className="card shadow-sm w-100">
-                            <div className="card-header fw-bold mb-4">
-                                Available {activeTab} Notes
+                    <h3 className="fw-bold text-capitalize my-3">{activeTab} Section</h3>
+
+                    {/* Sidebar Container */}
+                    <div className={`col-lg-2 sidebar-container ${isSidebarOpen ? 'open' : ''}`}>
+                        <div className="card shadow-sm w-100 h-100">
+                            <div className="card-header fw-bold d-flex justify-content-between align-items-center">
+                                Categories
+                                <button
+                                    className="btn-close d-lg-none"
+                                    onClick={() => setIsSidebarOpen(false)}
+                                    aria-label="Close"
+                                ></button>
                             </div>
-                            <div className="list-group list-group-flush">
+                            {/* Navigation links within the sidebar */}
+                            <div className="list-group list-group-flush mb-4">
+                                {["writing", "speaking", "listening", "reading"].map((tab) => (
+                                    <button
+                                        key={tab}
+                                        className={`list-group-item my-1 list-group-item-action text-capitalize ${activeTab === tab ? "active" : ""}`}
+                                        onClick={() => handleTabChange(tab)}
+                                        disabled={loading}
+                                    >
+                                        {tab}
+                                    </button>
+                                ))}
+                            </div>
+
+                            <div className="card-header fw-bold d-flex justify-content-between align-items-center">
+                                Available {activeTab} notes
+                            </div>
+                            <div className="list-group list-group-flush overflow-auto">
                                 {content.length === 0 && (
                                     <p className="text-muted m-3">No items available</p>
                                 )}
                                 {content.map((item) => (
                                     <button
                                         key={item._id}
-                                        className={`list-group-item list-group-item-action ${
+                                        className={`list-group-item my-1 list-group-item-action ${
                                             activeContent?._id === item._id ? "active" : ""
                                         }`}
-                                        onClick={() => setActiveContent(item)}
+                                        onClick={() => handleContentClick(item)}
                                     >
                                         {item.title}
                                     </button>
@@ -152,15 +166,14 @@ function StudentDashboard() {
                     </div>
 
                     {/* Viewer */}
-                    <div className="col-lg-10 col-xs-12">
-                        <div className="card shadow-sm p-4 w-100" >
+                    <div className="col-lg-10 col-xs-12 content-viewer">
+                        <div className="card shadow-sm p-4 w-100">
                             {activeContent ? (
                                 <>
                                     <h3 className="fw-bold text-dark mb-3">
                                         {activeContent.title}
                                     </h3>
                                     <p style={{whiteSpace: "pre-wrap"}}>{activeContent.text}</p>
-
                                     {/* Image */}
                                     {activeContent.imageUrl && (
                                         <img
@@ -170,7 +183,6 @@ function StudentDashboard() {
                                             style={{maxWidth: "400px"}}
                                         />
                                     )}
-
                                     {/* Audio */}
                                     {activeContent.audioUrl && (
                                         <audio controls className="w-100 mt-3">
@@ -180,7 +192,7 @@ function StudentDashboard() {
                                     )}
                                 </>
                             ) : (
-                                <p className="text-muted">Select a note from the left sidebar</p>
+                                <p className="text-muted">Select a topic to continue</p>
                             )}
                         </div>
                     </div>
@@ -188,7 +200,6 @@ function StudentDashboard() {
             </div>
         </Layout>
     );
-
 }
 
 export default StudentDashboard;
