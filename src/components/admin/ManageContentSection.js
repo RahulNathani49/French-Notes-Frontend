@@ -40,7 +40,7 @@ const ManageContentSection = ({ contents, setContents, contentError, filterType,
 
             {/* Edit Form */}
             {editingId && (
-                <div className="card p-3 mb-3">
+                <div className="card p-3 mb-3 w-100">
                     <h4>Edit Content</h4>
                     <input type="text" name="title" className="form-control mb-2" value={editForm.title} onChange={(e) => handleEditChange(e, setEditForm)} placeholder="Title" />
                     <select name="type" className="form-select mb-2" value={editForm.type} onChange={(e) => handleEditChange(e, setEditForm)}>
