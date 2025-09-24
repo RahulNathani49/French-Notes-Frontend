@@ -1,4 +1,4 @@
-# 🇫🇷 LearnFrench – Interactive Language Learning Platform
+# LearnFrench – Interactive Language Learning Platform
 
 Welcome to **LearnFrench**, a modern and user-friendly platform designed to help students learn French effectively.  
 This project delivers a smooth and structured learning experience with secure login, admin control, and a clean frontend.  
