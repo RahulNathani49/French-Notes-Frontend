@@ -93,9 +93,7 @@ function StudentDashboard() {
     // Handles tab change and sidebar closing
     const handleTabChange = (tab) => {
         setActiveTab(tab);
-        if (window.innerWidth < 992) {
-            setIsSidebarOpen(false);
-        }
+
     };
 
     return (
@@ -104,7 +102,7 @@ function StudentDashboard() {
                 {/* Mobile Menu Toggle Button */}
                 <div className="d-lg-none my-3 d-flex justify-content-between">
                     <button className="btn btn-dark" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
-                        <FontAwesomeIcon icon={isSidebarOpen ? faTimes : faBars} /> Notes
+                        <FontAwesomeIcon icon={isSidebarOpen ? faTimes : faBars} /> Choose Notes
                     </button>
                 </div>
 

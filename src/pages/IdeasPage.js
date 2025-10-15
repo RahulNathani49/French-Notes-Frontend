@@ -95,7 +95,8 @@ function IdeasPage() {
                                                     <h5 className="card-title">{idea.title}</h5>
                                                     <p className="card-text" style={{whiteSpace: "pre-wrap"}} > {idea.body}</p>
                                                     <div className="mt-auto">
-                                                        <small className="text-muted d-block">Submitted by: {idea.submittedBy?.username || "N/A"}</small>
+                                                       <small className="text-muted d-block">Submitted by: {idea.submittedBy?.name || "Admin"}</small>
+
                                                         <small className="text-muted d-block">Submitted at: {new Date(idea.createdAt).toLocaleString()}</small>
                                                     </div>
                                                     {/* Render the file inside the card-body for audio and other types */}

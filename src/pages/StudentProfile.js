@@ -50,8 +50,12 @@ function StudentProfile() {
                         <p>
                             <strong>Email:</strong> {profile.email}
                         </p>
+                        <p>
+                            <strong>Subscription:</strong> Free
+                        </p>
                         <p className="mt-3">
                             <Link to="/forgot-password">Reset Password</Link>
+
                         </p>
                     </div>
                 ) : (
