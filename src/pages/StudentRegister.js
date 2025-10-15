@@ -11,15 +11,47 @@ function StudentRegister() {
     const [email, setEmail] = useState("");
     const [message, setMessage] = useState("");
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
+
 
     const handleRegister = async (e) => {
         e.preventDefault();
+        // Trim inputs to remove leading/trailing spaces
+        const trimmedUsername = username.trim();
+        const trimmedPassword = password.trim();
+        const trimmedName = name.trim();
+        const trimmedEmail = email.trim();
+        // Validation
+        if (!trimmedUsername || !trimmedPassword || !trimmedName || !trimmedEmail) {
+            toast.error("All fields are required");
+            return;
+        }
+
+        if (trimmedUsername.length < 8) {
+            toast.error("Username must be at least 8 characters");
+            return;
+        }
+        if (trimmedPassword.length < 8) {
+            toast.error("Password must be at least 8 characters");
+            return;
+        }
+        if (/\s/.test(trimmedUsername)) {
+            toast.error("Username cannot contain spaces");
+            return;
+        }
+        if (/\s/.test(trimmedPassword)) {
+            toast.error("Password cannot contain spaces");
+            return;
+        }
+
+        setIsLoading(true);
+
         try {
             const res = await api.post("/auth/student-register", {
-                username,
-                password,
-                name,
-                email
+                username: trimmedUsername,
+                password: trimmedPassword,
+                name: trimmedName,
+                email: trimmedEmail,
             });
             toast.success("Student registered successfully");
 
@@ -31,6 +63,9 @@ function StudentRegister() {
         } catch (err) {
             toast.error(err.response?.data?.error || "❌ Registration failed");
 
+        }
+        finally {
+            setIsLoading(false);
         }
     };
 
@@ -81,10 +116,12 @@ function StudentRegister() {
                     />
                 </div>
 
-                <button type="submit">Register</button>
+                <button type="submit" disabled={isLoading}>
+                    {isLoading ? "Registering..." : "Register"}
+                </button>
             </form>
 
-            {message && <p style={{ marginTop: "10px" }}>{message}</p>}
+            {message && <p style={{marginTop: "10px"}}>{message}</p>}
         </div>
         </Layout>
     );

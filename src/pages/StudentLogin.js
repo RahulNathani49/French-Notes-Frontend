@@ -21,6 +21,7 @@ function StudentLogin() {
     const [message, setMessage] = useState("");
     const navigate = useNavigate();
     const location = useLocation();
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         // check if deviceId already exists in localStorage
@@ -49,6 +50,8 @@ function StudentLogin() {
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        setIsLoading(true); // start loading
+
         try {
             const res = await api.post("/auth/student-login", {
                 username,
@@ -73,6 +76,9 @@ function StudentLogin() {
                 err?.response?.data?.message ||
                 "Login failed. Please try again.";
             setMessage(serverError);
+        }
+        finally {
+            setIsLoading(false); // stop loading
         }
     };
 
@@ -99,10 +105,17 @@ function StudentLogin() {
                             required
                         />
                     </div>
-                    <button type="submit" style={{margin: "10px 0"}}>Login</button>
+                    <button type="submit" style={{margin: "10px 0"}} disabled={isLoading}>
+                        {isLoading ? "Logging in..." : "Login"}
+                    </button>
+                    <p className="mt-3">
+                        <Link to="/forgot-password">Forgot Username?</Link>
+                    </p>
                     <p className="mt-3">
                         <Link to="/forgot-password">Forgot Password?</Link>
                     </p>
+
+
                 </form>
                 {message && <p style={{color: "crimson"}}>{message}</p>}
             </div>
