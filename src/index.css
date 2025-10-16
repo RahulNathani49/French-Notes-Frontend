@@ -609,16 +609,24 @@ button.list-group-item{
 /* Desktop Styles (Left-to-Right) */
 @media (min-width: 992px) {
   .sidebar-container {
-    position: static; /* Removes fixed position */
-    top: auto;
-    left: auto;
-    height: auto;
-    padding: 0;
-    z-index: auto;
-    transition: none;
+    position: sticky;
+    top: 70px;
+  height: 100%;
+    overflow-y: auto;
+    scrollbar-width: thin;
   }
 }
-
+/* For WebKit browsers */
+.sidebar-container .list-group.scrollable-notes::-webkit-scrollbar {
+  width: 6px;
+}
+.sidebar-container .list-group.scrollable-notes::-webkit-scrollbar-thumb {
+  background-color: #aaa;
+  border-radius: 10px;
+}
+.sidebar-container .list-group.scrollable-notes::-webkit-scrollbar-track {
+  background: transparent;
+}
 /*
   Admin Dashboard Sidebar - Mobile Drawer Styles
   This class is added to the aside element in AdminDashboard.js

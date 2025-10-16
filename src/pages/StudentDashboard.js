@@ -7,6 +7,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { marked } from "marked";
+
+
 
 function StudentDashboard() {
     const [content, setContent] = useState([]);
@@ -171,7 +174,10 @@ function StudentDashboard() {
                                     <h3 className="fw-bold text-dark mb-3">
                                         {activeContent.title}
                                     </h3>
-                                    <p style={{whiteSpace: "pre-wrap"}}>{activeContent.text}</p>
+                                    <div
+                                        className="text-dark"
+                                        dangerouslySetInnerHTML={{__html: activeContent.text}}
+                                    ></div>
                                     {/* Image */}
                                     {activeContent.imageUrl && (
                                         <img

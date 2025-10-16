@@ -158,7 +158,9 @@ const IdeasSection = ({ideas, setIdeas, editingIdea, setEditingIdea, handleUpdat
                                             <p className="text-gray-900" style={{whiteSpace: "pre-wrap"}}>{idea.body}</p>
                                         </td>
                                         <td className="p-3 border-b border-gray-200 bg-white text-sm">
-                                            <p className="text-gray-900 whitespace-no-wrap">{idea.submittedBy.username}</p>
+                                            <p className="text-gray-900 whitespace-no-wrap">        {idea.submittedBy?.username || "Unknown"}
+                                            </p>
+
                                         </td>
                                         <td className="p-3border-b border-gray-200 bg-white text-sm">
                                             {idea.filePath ? (
