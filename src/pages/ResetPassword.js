@@ -30,7 +30,7 @@ function ResetPassword() {
         setIsLoading(true);
 
         try {
-            const res = await api.post(`/auth/student-reset-password/${token}`, { trimmedPassword });
+            const res = await api.post(`/auth/student-reset-password/${token}`, { password: trimmedPassword });
             setMessage(res.data.message);
             setTimeout(() => navigate("/student-login"), 2000);
         } catch (err) {
