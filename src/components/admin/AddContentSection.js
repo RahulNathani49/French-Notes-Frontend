@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { handleAddContent } from "../../utils/adminHandlers";
 
 const AddContentSection = ({
@@ -17,13 +17,21 @@ const AddContentSection = ({
                            }) => {
     const editableDivRef = useRef(null);
 
+    // NEW: mode toggle -> "rich" or "html"
+    const [inputMode, setInputMode] = useState("rich");
+
     const handleDivInput = () => {
-        setText(editableDivRef.current.innerHTML); // Save formatted HTML to state
+        setText(editableDivRef.current.innerHTML);
+    };
+
+    const handleHtmlTextarea = (e) => {
+        setText(e.target.value);
     };
 
     return (
         <div className="py-5">
             <h3 className="mb-3">Add Content</h3>
+
             <form
                 onSubmit={(e) =>
                     handleAddContent(
@@ -39,6 +47,7 @@ const AddContentSection = ({
                 }
                 className="card p-3 my-5 w-100"
             >
+                {/* TYPE SELECT */}
                 <div className="mb-3">
                     <label className="form-label">Type:</label>
                     <select
@@ -50,9 +59,11 @@ const AddContentSection = ({
                         <option value="writing">Writing</option>
                         <option value="listening">Listening</option>
                         <option value="speaking">Speaking</option>
+                        <option value="exam-based">Exam-Based</option>
                     </select>
                 </div>
 
+                {/* TITLE */}
                 <input
                     type="text"
                     className="form-control mb-2"
@@ -62,24 +73,59 @@ const AddContentSection = ({
                     required
                 />
 
-                <label className="form-label">Content Text (rich text)</label>
-                <div
-                    ref={editableDivRef}
-                    contentEditable
-                    spellCheck={false}   // <-- disables red underlines
-                    autoCorrect="off"    // <-- disables auto-correct on iOS/Android
-                    className="form-control mb-2"
-                    style={{
-                        minHeight: "150px",
-                        border: "1px solid #ced4da",
-                        borderRadius: ".25rem",
-                        padding: "8px",
-                        overflowY: "auto"
-                    }}
-                    onInput={handleDivInput}
-                    dangerouslySetInnerHTML={{ __html: text }} // to show initial content if needed
-                ></div>
+                {/* --- NEW RADIO TOGGLE --- */}
+                <label className="form-label fw-bold">Input Mode:</label>
+                <div className="d-flex gap-3 mb-3">
+                    <label>
+                        <input
+                            type="radio"
+                            value="rich"
+                            checked={inputMode === "rich"}
+                            onChange={() => setInputMode("rich")}
+                        />{" "}
+                        Rich Text Editor
+                    </label>
 
+                    <label>
+                        <input
+                            type="radio"
+                            value="html"
+                            checked={inputMode === "html"}
+                            onChange={() => setInputMode("html")}
+                        />{" "}
+                        Raw HTML Code
+                    </label>
+                </div>
+
+                {/* RECONDITIONALLY RENDER INPUT */}
+                {inputMode === "rich" ? (
+                    <div
+                        ref={editableDivRef}
+                        contentEditable
+                        spellCheck={false}
+                        autoCorrect="off"
+                        className="form-control mb-3"
+                        style={{
+                            minHeight: "150px",
+                            border: "1px solid #ced4da",
+                            borderRadius: ".25rem",
+                            padding: "8px",
+                            overflowY: "auto",
+                        }}
+                        onInput={handleDivInput}
+                        dangerouslySetInnerHTML={{ __html: text }}
+                    ></div>
+                ) : (
+                    <textarea
+                        className="form-control mb-3"
+                        style={{ minHeight: "150px" }}
+                        value={text}
+                        onChange={handleHtmlTextarea}
+                        placeholder="Paste or write HTML code here..."
+                    ></textarea>
+                )}
+
+                {/* IMAGE UPLOAD */}
                 <label className="form-label">Upload Image:</label>
                 <input
                     type="file"
@@ -88,6 +134,7 @@ const AddContentSection = ({
                     onChange={(e) => setFile(e.target.files[0])}
                 />
 
+                {/* AUDIO UPLOAD */}
                 <label className="form-label">Upload Audio:</label>
                 <input
                     type="file"

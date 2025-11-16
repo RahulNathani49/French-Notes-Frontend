@@ -132,7 +132,7 @@ function StudentDashboard() {
                             </div>
                             {/* Navigation links within the sidebar */}
                             <div className="list-group list-group-flush mb-4">
-                                {["writing", "speaking", "listening", "reading"].map((tab) => (
+                                {["writing", "speaking", "listening", "reading","exam-based"].map((tab) => (
                                     <button
                                         key={tab}
                                         className={`list-group-item my-1 list-group-item-action text-capitalize ${activeTab === tab ? "active" : ""}`}
