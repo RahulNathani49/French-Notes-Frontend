@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { saveAs } from "file-saver";
+
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -23,13 +25,14 @@ import {
     handleEditClick,
     handleEditChange,
     handleUpdateContent,
-    handleDeleteContent
+    handleDeleteContent, handleExportAllData
 } from "../utils/adminHandlers";
 import {fetchIdeas, handleDeleteIdea,handleUpdateIdea} from "../utils/ideaHandlers";
 import {FaChevronDown} from "react-icons/fa";
 
 function AdminDashboard() {
     const [logs, setLogs] = useState([]);
+
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [filter, setFilter] = useState("all");
@@ -101,15 +104,18 @@ function AdminDashboard() {
                             <button className="btn-close py-3" onClick={() => setIsSidebarOpen(false)}></button>
                         </div>
                         <div className="d-grid gap-2">
-                            {["users", "login", "manage","ideas", "add"].map((section) => (
+                            {["users", "login", "manage", "ideas", "add"].map((section) => (
                                 <button
                                     key={section}
                                     className={`btn ${activeSection === section ? "btn-primary" : "btn-outline-primary"}`}
                                     onClick={() => handleSectionChange(section)}
                                 >
-                                    {section === "users" ? "Manage Users" : section === "login" ? "Manage Login Requests" : section === "ideas" ? "Manage Ideas" : section === "manage" ? "Manage Content" : "Add Content"   }
+                                    {section === "users" ? "Manage Users" : section === "login" ? "Manage Login Requests" : section === "ideas" ? "Manage Ideas" : section === "manage" ? "Manage Content" : "Add Content"}
                                 </button>
                             ))}
+                            <button className="btn btn-success" onClick={handleExportAllData}>
+                                Export All Data
+                            </button>
                             <button className="btn btn-danger" onClick={() => handleLogout(navigate)}>Logout</button>
                         </div>
                     </aside>

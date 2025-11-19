@@ -1,6 +1,46 @@
 import api from "../api/axios";
 import { toast } from "react-toastify";
 
+import { saveAs } from "file-saver";
+
+// =====================
+// Export All Data
+// =====================
+export const handleExportAllData = async () => {
+    try {
+        const token = localStorage.getItem("adminToken");
+        if (!token) {
+            toast.error("You must be logged in as admin.");
+            return;
+        }
+
+        // Fetch all data
+        const [usersRes, contentsRes, ideasRes, logsRes] = await Promise.all([
+            api.get("/admin/users", { headers: { Authorization: `Bearer ${token}` } }),
+            api.get("/content", { headers: { Authorization: `Bearer ${token}` } }),
+            api.get("/ideas", { headers: { Authorization: `Bearer ${token}` } }),
+            api.get("admin/login-logs", { headers: { Authorization: `Bearer ${token}` } }),
+        ]);
+
+        // Combine all data into one JSON object
+        const allData = {
+            users: usersRes.data,
+            contents: contentsRes.data,
+            ideas: ideasRes.data,
+            loginlogs: logsRes.data,
+        };
+// Convert to Blob and save as JSON file
+        const blob = new Blob([JSON.stringify(allData, null, 2)], { type: "application/json;charset=utf-8" });
+        saveAs(blob, "admin_data_export.json");
+        // Log it in console
+
+
+        toast.success("All data fetched successfully");
+    } catch (err) {
+        console.error("Failed to fetch all data:", err);
+        toast.error("❌ Failed to fetch all data");
+    }
+};
 // =====================
 // Logout handler
 // =====================
@@ -20,6 +60,7 @@ export const fetchUsers = async (setUsers) => {
             headers: { Authorization: `Bearer ${token}` },
         });
         setUsers(res.data);
+
     } catch (err) {
         toast.error("❌ Failed to fetch users");
     }
