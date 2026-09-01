@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import Layout from "../components/Layout";
@@ -7,7 +7,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { marked } from "marked";
 
 
 
@@ -22,11 +21,11 @@ function StudentDashboard() {
     const navigate = useNavigate();
 
     // Helper: send user to login
-    const redirectToLogin = (msg = "Please login as student") => {
+    const redirectToLogin = useCallback((msg = "Please login as student") => {
         localStorage.removeItem("studentToken");
         localStorage.removeItem("studentRole");
         navigate(`/student-login?msg=${encodeURIComponent(msg)}`, { replace: true });
-    };
+    }, [navigate]);
 
     // Guard: require student token + role
     useEffect(() => {
@@ -35,10 +34,10 @@ function StudentDashboard() {
         if (!token || role !== "student") {
             redirectToLogin("Access denied. Student login required.");
         }
-    }, []);
+    }, [redirectToLogin]);
 
     // Fetch content by type
-    const fetchContent = async () => {
+    const fetchContent = useCallback(async () => {
         const token = localStorage.getItem("studentToken");
         const role = localStorage.getItem("studentRole");
         if (!token || role !== "student") {
@@ -78,12 +77,12 @@ function StudentDashboard() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [activeTab, redirectToLogin]);
 
     // Refetch whenever tab changes
     useEffect(() => {
         fetchContent();
-    }, [activeTab]);
+    }, [activeTab, fetchContent]);
 
     // Handles content selection and sidebar closing
     const handleContentClick = (item) => {
@@ -96,7 +95,6 @@ function StudentDashboard() {
     // Handles tab change and sidebar closing
     const handleTabChange = (tab) => {
         setActiveTab(tab);
-
     };
 
     return (
