@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
-import { toast } from "react-toastify";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { fetchIdeas, handleSubmitIdea, handleDeleteIdea } from "../utils/ideaHandlers";
+import { fetchIdeas, handleSubmitIdea } from "../utils/ideaHandlers";
 
 function IdeasPage() {
     const [ideas, setIdeas] = useState([]);
@@ -13,23 +12,21 @@ function IdeasPage() {
     const [submitting, setSubmitting] = useState(false);
     const navigate = useNavigate();
 
-    const redirectToLogin = (msg = "Please login to access this page") => {
+    const redirectToLogin = useCallback((msg = "Please login to access this page") => {
         localStorage.removeItem("studentToken");
         localStorage.removeItem("studentRole");
         localStorage.removeItem("adminToken");
         localStorage.removeItem("adminRole");
         navigate(`/student-login?msg=${encodeURIComponent(msg)}`, { replace: true });
-    };
+    }, [navigate]);
 
     const handleFormSubmit = (e) => {
         handleSubmitIdea(e, ideaForm, setSubmitting, setIdeaForm, () => fetchIdeas(setIdeas, setError, setLoading, redirectToLogin));
     };
 
-
-
     useEffect(() => {
         fetchIdeas(setIdeas, setError, setLoading, redirectToLogin);
-    }, []);
+    }, [redirectToLogin]);
 
     // The renderFile function is now corrected to not include Bootstrap card classes
     const renderFile = (filePath) => {
