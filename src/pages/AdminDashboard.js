@@ -1,8 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { saveAs } from "file-saver";
-
-import { toast } from "react-toastify";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
 
@@ -27,13 +24,10 @@ import {
     handleUpdateContent,
     handleDeleteContent, handleExportAllData
 } from "../utils/adminHandlers";
-import {fetchIdeas, handleDeleteIdea,handleUpdateIdea} from "../utils/ideaHandlers";
-import {FaChevronDown} from "react-icons/fa";
+import {fetchIdeas, handleDeleteIdea, handleUpdateIdea} from "../utils/ideaHandlers";
 
 function AdminDashboard() {
     const [logs, setLogs] = useState([]);
-
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [filter, setFilter] = useState("all");
     const [filterType, setFilterType] = useState("");
@@ -54,24 +48,24 @@ function AdminDashboard() {
 
     const navigate = useNavigate();
 
-    const redirectToLogin = (msg = "Please login as admin") => {
+    const redirectToLogin = useCallback((msg = "Please login as admin") => {
         localStorage.removeItem("adminToken");
         localStorage.removeItem("adminRole");
         navigate(`/admin-login?msg=${encodeURIComponent(msg)}`, { replace: true });
-    };
+    }, [navigate]);
 
     useEffect(() => {
         const token = localStorage.getItem("adminToken");
         const role = localStorage.getItem("adminRole");
         if (!token || role !== "admin") redirectToLogin("Access denied. Admin login required.");
-    }, []);
+    }, [redirectToLogin]);
 
     useEffect(() => {
         fetchUsers(setUsers);
-        fetchLogs(setLogs, setError, setLoading);
+        fetchLogs(setLogs, setError);
         fetchContent(setContents);
-        fetchIdeas(setIdeas, setError, setLoading, redirectToLogin);
-    }, []);
+        fetchIdeas(setIdeas, setError, () => {}, redirectToLogin);
+    }, [redirectToLogin]);
 
     const displayedLogs = logs.filter((log) => {
         if (filter === "pending") return log.status === "pending";
@@ -124,7 +118,7 @@ function AdminDashboard() {
                     <main className="col-12 col-md-9 col-lg-10 p-4">
                         {error && <p className="text-danger">{error}</p>}
                         {activeSection === "users" && (
-                            <UsersSection users={users} setUsers={setUsers} fetchLogs={fetchLogs} setLogs={setLogs} setError={setError} setLoading={setLoading} handleRemoveUser={handleRemoveUser} handleResetUserLogs={handleResetUserLogs} />
+                            <UsersSection users={users} setUsers={setUsers} fetchLogs={fetchLogs} setLogs={setLogs} setError={setError} handleRemoveUser={handleRemoveUser} handleResetUserLogs={handleResetUserLogs} />
                         )}
                         {activeSection === "login" && (
                             <LoginLogsSection displayedLogs={displayedLogs} filter={filter} setFilter={setFilter} handleApprove={handleApprove} setLogs={setLogs} />
