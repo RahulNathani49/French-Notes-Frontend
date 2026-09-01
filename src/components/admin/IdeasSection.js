@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
+import React, { useState } from 'react';
 
 const IdeaEditForm = ({ idea, ideaForm, onFormChange, onFileChange, onFormSubmit, onCancel }) => {
     return (
