@@ -9,7 +9,6 @@ function StudentRegister() {
     const [password, setPassword] = useState("");
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
-    const [message, setMessage] = useState("");
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
 
@@ -47,7 +46,7 @@ function StudentRegister() {
         setIsLoading(true);
 
         try {
-            const res = await api.post("/auth/student-register", {
+            await api.post("/auth/student-register", {
                 username: trimmedUsername,
                 password: trimmedPassword,
                 name: trimmedName,
@@ -120,8 +119,6 @@ function StudentRegister() {
                     {isLoading ? "Registering..." : "Register"}
                 </button>
             </form>
-
-            {message && <p style={{marginTop: "10px"}}>{message}</p>}
         </div>
         </Layout>
     );
